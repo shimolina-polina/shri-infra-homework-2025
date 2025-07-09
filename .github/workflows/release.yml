@@ -73,7 +73,8 @@ jobs:
           else
             COMMITS=$(git log ${{ steps.prev_tag.outputs.PREV_TAG }}..HEAD --oneline)
           fi
-
+          echo "COMMITS:"
+          echo "$COMMITS"
           echo "COMMITS<<EOF" >> $GITHUB_OUTPUT
           echo "$COMMITS" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
