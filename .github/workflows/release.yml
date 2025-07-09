@@ -62,7 +62,7 @@ jobs:
         id: prev_tag
         run: |
           git fetch --tags
-          TAG=$(git tag --sort=-creatordate | grep -E '^[0-9]+$' | head -n 1)
+          TAG=$(git tag --sort=-creatordate | grep -E '^[0-9]+$' | sed -n 2p)
           echo "PREV_TAG=$TAG" >> $GITHUB_OUTPUT
 
       - name: generate commit list
