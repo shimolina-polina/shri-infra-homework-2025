@@ -80,6 +80,7 @@ jobs:
 
       - name: update CHANGELOG.md
         run: |
+          # Обновляем в релизной ветке
           echo "## Версия $VERSION - $(date +'%Y-%m-%d')" > TEMP_CHANGELOG
           echo "${{ steps.changelog.outputs.COMMITS }}" >> TEMP_CHANGELOG
           echo "" >> TEMP_CHANGELOG
@@ -88,9 +89,14 @@ jobs:
           git add CHANGELOG.md
           git commit -m "update changelog for release $VERSION"
           git push origin releases/${VERSION}
+
+          # Сохраняем обновлённый CHANGELOG.md во временный файл
+          cp CHANGELOG.md CHANGELOG_RELEASE.md
+
+          # Переключаемся на main и обновляем там CHANGELOG.md
           git checkout main
           git pull origin main
-          cp CHANGELOG.md ./CHANGELOG.md
+          mv CHANGELOG_RELEASE.md CHANGELOG.md
           git add CHANGELOG.md
           git commit -m "update CHANGELOG for release $VERSION"
           git push origin main
