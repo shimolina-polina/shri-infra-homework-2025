@@ -68,7 +68,12 @@ jobs:
       - name: generate commit list
         id: changelog
         run: |
-          COMMITS=$(git log ${{ steps.prev_tag.outputs.PREV_TAG }}..HEAD --oneline)
+          if [ -z "${{ steps.prev_tag.outputs.PREV_TAG }}" ]; then
+            COMMITS=$(git log --oneline)
+          else
+            COMMITS=$(git log ${{ steps.prev_tag.outputs.PREV_TAG }}..HEAD --oneline)
+          fi
+
           echo "COMMITS<<EOF" >> $GITHUB_OUTPUT
           echo "$COMMITS" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
@@ -83,6 +88,13 @@ jobs:
           git add CHANGELOG.md
           git commit -m "update changelog for release $VERSION"
           git push origin releases/${VERSION}
+          git checkout main
+          git pull origin main
+          cp CHANGELOG.md ./CHANGELOG.md
+          git add CHANGELOG.md
+          git commit -m "update CHANGELOG for release $VERSION"
+          git push origin main
+
 
       - name: create GitHub Issue
         uses: peter-evans/create-issue-from-file@v5
