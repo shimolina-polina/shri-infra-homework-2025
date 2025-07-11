@@ -81,8 +81,20 @@ jobs:
 
       - name: update CHANGELOG.md
         run: |
-          # Обновляем в релизной ветке
-          echo "## Версия $VERSION - $(date +'%Y-%m-%d')" > TEMP_CHANGELOG
+          # Получаем предыдущую релизную ветку
+          PREV_TAG="${{ steps.prev_tag.outputs.PREV_TAG }}"
+          if [ -n "$PREV_TAG" ]; then
+            git fetch origin releases/$PREV_TAG:releases/$PREV_TAG || true
+            BASE_BRANCH="releases/$PREV_TAG"
+          else
+            BASE_BRANCH="main"
+          fi
+
+          # Берём CHANGELOG.md из предыдущей релизной ветки (или main, если это первый релиз)
+          git checkout $BASE_BRANCH -- CHANGELOG.md || touch CHANGELOG.md
+
+          # Обновляем CHANGELOG.md в текущей релизной ветке
+          echo "## Версия ${VERSION} - $(date +'%Y-%m-%d')" > TEMP_CHANGELOG
           echo "${{ steps.changelog.outputs.COMMITS }}" >> TEMP_CHANGELOG
           echo "" >> TEMP_CHANGELOG
           cat CHANGELOG.md >> TEMP_CHANGELOG
@@ -91,24 +103,6 @@ jobs:
           git commit -m "update changelog for release $VERSION"
           git push origin releases/${VERSION}
 
-          # Сохраняем обновлённый CHANGELOG.md во временный файл
-          cp CHANGELOG.md CHANGELOG_RELEASE.md
-
-          # Переключаемся на main и обновляем там CHANGELOG.md
-          git checkout main
-          git pull origin main
-          mv CHANGELOG_RELEASE.md CHANGELOG.md
-          git add CHANGELOG.md
-          git commit -m "update CHANGELOG for release $VERSION"
-          git push origin main
-
-
-      - name: create GitHub Issue
-        uses: peter-evans/create-issue-from-file@v5
-        with:
-          title: "Версия ${{ env.VERSION }}"
-          content-filepath: .github/release-template.md
-          labels: release
 
       - name: generate release template
         run: |
@@ -118,3 +112,10 @@ jobs:
           echo "**Коммиты с предыдущего релиза**:" >> .github/release-template.md
           echo "${{ steps.changelog.outputs.COMMITS }}" >> .github/release-template.md
           echo "**Docker-образ в Yandex Container Registry**: cr.yandex/${{ secrets.YC_CR_REGISTRY_ID }}/app:${VERSION}" >> .github/release-template.md
+
+      - name: create GitHub Issue
+        uses: peter-evans/create-issue-from-file@v5
+        with:
+          title: "Версия ${VERSION}"
+          content-filepath: .github/release-template.md
+          labels: release
