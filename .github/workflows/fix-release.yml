@@ -116,12 +116,14 @@ jobs:
       
       - name: find release issue number
         id: find_issue
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           ISSUE_NUMBER=$(gh issue list --state open --search "${VERSION}" --json number --jq '.[0].number')
           echo "ISSUE_NUMBER=$ISSUE_NUMBER" >> $GITHUB_OUTPUT
 
-
       - name: add comment to release issue
+        if: steps.find_issue.outputs.ISSUE_NUMBER != ''
         uses: peter-evans/create-or-update-comment@v4
         with:
           issue-number: ${{ steps.find_issue.outputs.ISSUE_NUMBER }}
