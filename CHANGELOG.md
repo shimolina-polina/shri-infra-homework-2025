@@ -1,3 +1,6 @@
+## Фикс 12_fix3 - 2025-07-11
+6353ba9 update changelog for release 12
+
 ## Версия 12 - 2025-07-11
 2e8fc04 Merge pull request #13 from shimolina-polina/add-find-issue
 
