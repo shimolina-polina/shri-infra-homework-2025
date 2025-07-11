@@ -1,3 +1,6 @@
+## Фикс 11_fix2 - 2025-07-11
+b79d0a1 update changelog for release 11
+
 ## Версия 11 - 2025-07-11
 d7227e9 Merge pull request #11 from shimolina-polina/fix-fix-flow
 
