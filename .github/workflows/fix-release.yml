@@ -113,10 +113,16 @@ jobs:
           echo "**Коммиты с предыдущего релизного (или фиксрелизного) тега**:" >> .github/fix-release-template.md
           echo "${{ steps.changelog.outputs.COMMITS }}" >> .github/fix-release-template.md
           echo "**Docker-образ в Yandex Container Registry**: cr.yandex/${{ secrets.YC_CR_REGISTRY_ID }}/app:${VERSION}_fix${FIX_NUMBER}" >> .github/fix-release-template.md
+      
+      - name: find release issue number
+        id: find_issue
+        run: |
+          ISSUE_NUMBER=$(gh issue list --state open --search "${VERSION}" --json number --jq '.[0].number')
+          echo "ISSUE_NUMBER=$ISSUE_NUMBER" >> $GITHUB_OUTPUT
 
 
       - name: add comment to release issue
         uses: peter-evans/create-or-update-comment@v4
         with:
-          issue-number: ${{ env.VERSION }}
+          issue-number: ${{ steps.find_issue.outputs.ISSUE_NUMBER }}
           body-file: .github/fix-release-template.md
