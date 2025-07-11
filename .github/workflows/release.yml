@@ -81,7 +81,6 @@ jobs:
 
       - name: update CHANGELOG.md
         run: |
-          # Получаем предыдущую релизную ветку
           PREV_TAG="${{ steps.prev_tag.outputs.PREV_TAG }}"
           if [ -n "$PREV_TAG" ]; then
             git fetch origin releases/$PREV_TAG:releases/$PREV_TAG || true
@@ -90,10 +89,8 @@ jobs:
             BASE_BRANCH="main"
           fi
 
-          # Берём CHANGELOG.md из предыдущей релизной ветки (или main, если это первый релиз)
           git checkout $BASE_BRANCH -- CHANGELOG.md || touch CHANGELOG.md
 
-          # Обновляем CHANGELOG.md в текущей релизной ветке
           echo "## Версия ${VERSION} - $(date +'%Y-%m-%d')" > TEMP_CHANGELOG
           echo "${{ steps.changelog.outputs.COMMITS }}" >> TEMP_CHANGELOG
           echo "" >> TEMP_CHANGELOG
@@ -116,6 +113,6 @@ jobs:
       - name: create GitHub Issue
         uses: peter-evans/create-issue-from-file@v5
         with:
-          title: "Версия ${VERSION}"
+          title: "Версия ${{ env.VERSION }}"
           content-filepath: .github/release-template.md
           labels: release
