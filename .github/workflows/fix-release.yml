@@ -114,15 +114,9 @@ jobs:
           echo "${{ steps.changelog.outputs.COMMITS }}" >> .github/fix-release-template.md
           echo "**Docker-образ в Yandex Container Registry**: cr.yandex/${{ secrets.YC_CR_REGISTRY_ID }}/app:${VERSION}_fix${FIX_NUMBER}" >> .github/fix-release-template.md
 
-      - name: find related issue number
-        id: find_issue
-        uses: peter-evans/find-issue@v2
-        with:
-          title: "Версия ${{ env.VERSION }}"
-          state: open
 
       - name: add comment to release issue
         uses: peter-evans/create-or-update-comment@v4
         with:
-          issue-number: ${{ steps.find_issue.outputs.issue-number }}
+          issue-number: ${{ env.VERSION }}
           body-file: .github/fix-release-template.md
