@@ -32,8 +32,6 @@ jobs:
 
       - name: deploy to production VM
         uses: appleboy/ssh-action@v1.0.3
-        env:
-            VERSION: ${{ github.event.inputs.version }}
         with:
           host: ${{ secrets.PROD_HOST }}
           username: ${{ secrets.PROD_USERNAME }}
@@ -41,8 +39,7 @@ jobs:
           port: ${{ secrets.PROD_SSH_PORT || 22 }}
           script: |
             echo "=== DEBUG INFO ==="
-            echo "VERSION variable: '${VERSION}'"
-            echo "VERSION length: ${#VERSION}"
+            echo "VERSION variable: '${{ github.event.inputs.version }}'"
             echo "=================="
 
             docker stop app || true
@@ -54,14 +51,14 @@ jobs:
               --username oauth \
               --password-stdin cr.yandex
             
-            docker pull cr.yandex/${{ secrets.YC_CR_REGISTRY_ID }}/app:${VERSION}_latest
+            docker pull cr.yandex/${{ secrets.YC_CR_REGISTRY_ID }}/app:${{ github.event.inputs.version }}_latest
             
             docker run -d \
               --name app \
               --restart unless-stopped \
               -p 80:3000 \
               -e NODE_ENV=production \
-              cr.yandex/${{ secrets.YC_CR_REGISTRY_ID }}/app:${VERSION}_latest
+              cr.yandex/${{ secrets.YC_CR_REGISTRY_ID }}/app:${{ github.event.inputs.version }}_latest
             
             sleep 5
             if ! docker ps | grep -q app; then
