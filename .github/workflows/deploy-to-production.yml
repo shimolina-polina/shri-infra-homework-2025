@@ -14,6 +14,7 @@ jobs:
     env:
       VERSION: ${{ github.event.inputs.version }}
     steps:
+      - uses: actions/checkout@v4
       - name: check if Docker image exists
         run: |
           echo "${{ secrets.YC_OAUTH_TOKEN }}" | docker login \
@@ -73,7 +74,6 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          cd $GITHUB_WORKSPACE
 
           ISSUE_NUMBER=$(gh issue list --state open --search "${VERSION}" --json number --jq '.[0].number')
           if [ -z "$ISSUE_NUMBER" ]; then
