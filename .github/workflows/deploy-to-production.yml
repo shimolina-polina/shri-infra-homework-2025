@@ -38,9 +38,6 @@ jobs:
           key: ${{ secrets.PROD_SSH_KEY }}
           port: ${{ secrets.PROD_SSH_PORT || 22 }}
           script: |
-            echo "=== DEBUG INFO ==="
-            echo "VERSION variable: '${{ github.event.inputs.version }}'"
-            echo "=================="
 
             docker stop app || true
             docker rm app || true
@@ -48,10 +45,8 @@ jobs:
             docker image prune -f
             
             docker-credential-yc list || echo "Credential helper not configured"
-            
-            echo "${{ secrets.YC_OAUTH_TOKEN }}" | docker login \
-              --username oauth \
-              --password-stdin cr.yandex
+
+            docker login -u oauth -p "${{ secrets.YC_OAUTH_TOKEN }}" cr.yandex
             
             docker pull cr.yandex/${{ secrets.YC_CR_REGISTRY_ID }}/app:${{ github.event.inputs.version }}_latest
             
