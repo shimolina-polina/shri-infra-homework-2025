@@ -32,6 +32,8 @@ jobs:
 
       - name: deploy to production VM
         uses: appleboy/ssh-action@v1.0.3
+        env:
+            VERSION: ${{ github.event.inputs.version }}
         with:
           host: ${{ secrets.PROD_HOST }}
           username: ${{ secrets.PROD_USERNAME }}
