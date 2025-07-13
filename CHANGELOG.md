@@ -1,3 +1,6 @@
+## Фикс 11_fix5 - 2025-07-13
+a12c37b update changelog for fix release 11_fix4
+
 ## Фикс 11_fix4 - 2025-07-11
 d9a3044 update changelog for fix release 11_fix2
 
