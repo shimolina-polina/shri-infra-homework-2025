@@ -47,6 +47,8 @@ jobs:
             
             docker image prune -f
             
+            docker-credential-yc list || echo "Credential helper not configured"
+            
             echo "${{ secrets.YC_OAUTH_TOKEN }}" | docker login \
               --username oauth \
               --password-stdin cr.yandex
