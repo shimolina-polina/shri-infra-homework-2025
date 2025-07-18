@@ -46,8 +46,6 @@ jobs:
             docker image prune -f
             
             docker-credential-yc list || echo "Credential helper not configured"
-
-            docker login -u oauth -p "${{ secrets.YC_OAUTH_TOKEN }}" cr.yandex
             
             docker pull cr.yandex/${{ secrets.YC_CR_REGISTRY_ID }}/app:${{ github.event.inputs.version }}_latest
             
@@ -102,11 +100,3 @@ jobs:
         with:
           issue-number: ${{ steps.find_issue.outputs.ISSUE_NUMBER }}
           body-file: .github/deployment-comment.md
-
-      - name: create deployment issue if no release issue found
-        if: steps.find_issue.outputs.ISSUE_NUMBER == ''
-        uses: peter-evans/create-issue-from-file@v5
-        with:
-          title: "Деплой версии ${VERSION} в продакшн"
-          content-filepath: .github/deployment-comment.md
-          labels: deployment,production 
