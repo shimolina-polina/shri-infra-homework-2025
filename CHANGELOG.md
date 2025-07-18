@@ -1,3 +1,6 @@
+## Фикс 20_fix9 - 2025-07-18
+df1cebd update changelog for release 20
+
 ## Версия 20 - 2025-07-18
 
 
