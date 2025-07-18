@@ -73,7 +73,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
 
-          ISSUE_NUMBER=$(gh issue list --state open --search "${VERSION}" --json number --jq '.[0].number')
+          ISSUE_NUMBER=$(gh issue list --state open --search "Версия ${VERSION}" --json number --jq '.[0].number')
           if [ -z "$ISSUE_NUMBER" ]; then
             echo "Warning: No open issue found for version ${VERSION}"
             echo "ISSUE_NUMBER=" >> $GITHUB_OUTPUT
