@@ -1,3 +1,6 @@
+## Фикс 15_fix6 - 2025-07-18
+1d31bb9 update changelog for release 15
+
 ## Версия 15 - 2025-07-18
 f0b9589 Merge pull request #25 from shimolina-polina/link-to-readme
 
