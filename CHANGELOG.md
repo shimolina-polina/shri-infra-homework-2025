@@ -1,3 +1,6 @@
+## Фикс 18_fix7 - 2025-07-18
+752a90f update changelog for release 18
+
 ## Версия 18 - 2025-07-18
 ed65ba8 Merge pull request #33 from shimolina-polina/fix101
 
