@@ -1,3 +1,6 @@
+## Фикс 19_fix8 - 2025-07-18
+18f47a1 update changelog for release 19
+
 ## Версия 19 - 2025-07-18
 
 
