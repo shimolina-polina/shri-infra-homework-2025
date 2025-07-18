@@ -45,7 +45,7 @@ jobs:
             
             docker image prune -f
             
-            docker-credential-yc list || echo "Credential helper not configured"
+            # docker-credential-yc list || echo "Credential helper not configured"  # Можно оставить для отладки
             
             docker pull cr.yandex/${{ secrets.YC_CR_REGISTRY_ID }}/app:${{ github.event.inputs.version }}_latest
             
