@@ -39,7 +39,7 @@ jobs:
           key: ${{ secrets.PROD_SSH_KEY }}
           port: ${{ secrets.PROD_SSH_PORT || 22 }}
           script: |
-
+            export PATH=$PATH:/home/polina/yandex-cloud/bin
             docker stop app || true
             docker rm app || true
             
