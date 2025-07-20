@@ -1,3 +1,6 @@
+## Фикс 21_fix10 - 2025-07-20
+e24bde2 update changelog for release 21
+
 ## Версия 21 - 2025-07-20
 
 
